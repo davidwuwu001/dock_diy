@@ -1,5 +1,32 @@
 import SwiftUI
 
+private extension AppInfo {
+    func matches(_ query: String) -> Bool {
+        let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return true }
+
+        let haystack = [
+            name,
+            bundleIdentifier ?? "",
+            path.lastPathComponent,
+            path.path(percentEncoded: false)
+        ].joined(separator: " ")
+
+        return trimmed
+            .split(separator: " ")
+            .allSatisfy { haystack.localizedCaseInsensitiveContains($0) }
+    }
+}
+
+private func selectedFirst(_ apps: [AppInfo], selected: Set<URL>) -> [AppInfo] {
+    apps.sorted { lhs, rhs in
+        let lhsSelected = selected.contains(lhs.path)
+        let rhsSelected = selected.contains(rhs.path)
+        if lhsSelected != rhsSelected { return lhsSelected }
+        return lhs.name.localizedCaseInsensitiveCompare(rhs.name) == .orderedAscending
+    }
+}
+
 struct AppPickerSheet: View {
     @Environment(DockViewModel.self) private var viewModel
     @Environment(\.dismiss) private var dismiss
@@ -22,12 +49,21 @@ struct AppPickerSheet: View {
                 .textFieldStyle(.roundedBorder)
 
             ScrollView {
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 70))], spacing: 8) {
-                    ForEach(filteredApps) { app in
-                        appTile(app)
+                if filteredApps.isEmpty {
+                    ContentUnavailableView(
+                        "没有匹配的应用",
+                        systemImage: "magnifyingglass",
+                        description: Text("换个关键词试试")
+                    )
+                    .frame(maxWidth: .infinity, minHeight: 180)
+                } else {
+                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 70))], spacing: 8) {
+                        ForEach(filteredApps) { app in
+                            appTile(app)
+                        }
                     }
+                    .padding(.horizontal, 4)
                 }
-                .padding(.horizontal, 4)
             }
 
             HStack {
@@ -69,13 +105,7 @@ struct AppPickerSheet: View {
     }
 
     private var filteredApps: [AppInfo] {
-        if searchText.isEmpty {
-            return availableApps
-        }
-        return availableApps.filter {
-            $0.name.localizedCaseInsensitiveContains(searchText)
-            || ($0.bundleIdentifier?.localizedCaseInsensitiveContains(searchText) ?? false)
-        }
+        selectedFirst(availableApps.filter { $0.matches(searchText) }, selected: selectedApps)
     }
 
     private func appTile(_ app: AppInfo) -> some View {
@@ -144,12 +174,21 @@ struct DockAppPickerSheet: View {
                 .textFieldStyle(.roundedBorder)
 
             ScrollView {
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 70))], spacing: 8) {
-                    ForEach(filteredApps) { app in
-                        appTile(app)
+                if filteredApps.isEmpty {
+                    ContentUnavailableView(
+                        "没有匹配的应用",
+                        systemImage: "magnifyingglass",
+                        description: Text("换个关键词试试")
+                    )
+                    .frame(maxWidth: .infinity, minHeight: 180)
+                } else {
+                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 70))], spacing: 8) {
+                        ForEach(filteredApps) { app in
+                            appTile(app)
+                        }
                     }
+                    .padding(.horizontal, 4)
                 }
-                .padding(.horizontal, 4)
             }
 
             HStack {
@@ -193,13 +232,7 @@ struct DockAppPickerSheet: View {
     }
 
     private var filteredApps: [AppInfo] {
-        if searchText.isEmpty {
-            return availableApps
-        }
-        return availableApps.filter {
-            $0.name.localizedCaseInsensitiveContains(searchText)
-            || ($0.bundleIdentifier?.localizedCaseInsensitiveContains(searchText) ?? false)
-        }
+        selectedFirst(availableApps.filter { $0.matches(searchText) }, selected: selectedApps)
     }
 
     private func appTile(_ app: AppInfo) -> some View {
@@ -277,12 +310,21 @@ struct DockItemEditorSheet: View {
                 .textFieldStyle(.roundedBorder)
 
             ScrollView {
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 70))], spacing: 8) {
-                    ForEach(filteredApps) { app in
-                        appTile(app)
+                if filteredApps.isEmpty {
+                    ContentUnavailableView(
+                        "没有匹配的应用",
+                        systemImage: "magnifyingglass",
+                        description: Text("换个关键词试试")
+                    )
+                    .frame(maxWidth: .infinity, minHeight: 220)
+                } else {
+                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 70))], spacing: 8) {
+                        ForEach(filteredApps) { app in
+                            appTile(app)
+                        }
                     }
+                    .padding(.horizontal, 4)
                 }
-                .padding(.horizontal, 4)
             }
 
             HStack {
@@ -324,13 +366,7 @@ struct DockItemEditorSheet: View {
     }
 
     private var filteredApps: [AppInfo] {
-        if searchText.isEmpty {
-            return availableApps
-        }
-        return availableApps.filter {
-            $0.name.localizedCaseInsensitiveContains(searchText)
-            || ($0.bundleIdentifier?.localizedCaseInsensitiveContains(searchText) ?? false)
-        }
+        availableApps.filter { $0.matches(searchText) }
     }
 
     private func appTile(_ app: AppInfo) -> some View {

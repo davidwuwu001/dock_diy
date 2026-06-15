@@ -3,6 +3,7 @@ import SwiftUI
 struct DockGroupView: View {
     @Environment(DockViewModel.self) private var viewModel
     let group: DockGroup
+    @State private var hoveredMember: URL?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -54,21 +55,44 @@ struct DockGroupView: View {
 
     private func memberView(_ member: DockGroupMember) -> some View {
         VStack(spacing: 4) {
-            if let icon = member.icon {
-                Image(nsImage: icon)
-                    .resizable()
-                    .frame(width: 44, height: 44)
-            } else {
-                Image(systemName: "app")
-                    .font(.system(size: 28))
-                    .frame(width: 44, height: 44)
-                    .foregroundStyle(.secondary)
+            ZStack(alignment: .topTrailing) {
+                if let icon = member.icon {
+                    Image(nsImage: icon)
+                        .resizable()
+                        .frame(width: 44, height: 44)
+                } else {
+                    Image(systemName: "app")
+                        .font(.system(size: 28))
+                        .frame(width: 44, height: 44)
+                        .foregroundStyle(.secondary)
+                }
+
+                Button {
+                    viewModel.removeAppFromGroup(
+                        groupId: group.id,
+                        appName: member.symlinkPath.lastPathComponent
+                    )
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .font(.system(size: 14))
+                        .foregroundStyle(.red)
+                        .background(Circle().fill(.background))
+                }
+                .buttonStyle(.plain)
+                .opacity(hoveredMember == member.appPath ? 1 : 0.78)
+                .offset(x: 6, y: -6)
+                .help("从分组移除")
             }
 
             Text(member.label)
                 .font(.system(size: 10))
                 .lineLimit(1)
                 .frame(maxWidth: 64)
+        }
+        .padding(4)
+        .contentShape(Rectangle())
+        .onHover { isHovered in
+            hoveredMember = isHovered ? member.appPath : nil
         }
         .contextMenu {
             Button("从分组移除") {

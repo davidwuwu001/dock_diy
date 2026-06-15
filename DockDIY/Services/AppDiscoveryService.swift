@@ -15,12 +15,14 @@ final class AppDiscoveryService {
 
     func discoverApps(in directories: [URL]? = nil) -> [AppInfo] {
         let searchDirs = directories ?? [
+            URL(fileURLWithPath: "/System/Applications"),
+            URL(fileURLWithPath: "/System/Applications/Utilities"),
             URL(fileURLWithPath: "/Applications"),
             FileManager.default.homeDirectoryForCurrentUser
                 .appendingPathComponent("Applications")
         ]
 
-        var apps: [AppInfo] = []
+        var appsByPath: [URL: AppInfo] = [:]
         let fm = FileManager.default
 
         for dir in searchDirs {
@@ -33,7 +35,7 @@ final class AppDiscoveryService {
             for url in contents {
                 if url.pathExtension == "app" {
                     if let info = appInfo(from: url) {
-                        apps.append(info)
+                        appsByPath[info.path] = info
                     }
                 }
                 // Also search one level deeper for subfolders in /Applications
@@ -45,7 +47,7 @@ final class AppDiscoveryService {
                     ) {
                         for subURL in subContents where subURL.pathExtension == "app" {
                             if let info = appInfo(from: subURL) {
-                                apps.append(info)
+                                appsByPath[info.path] = info
                             }
                         }
                     }
@@ -53,7 +55,9 @@ final class AppDiscoveryService {
             }
         }
 
-        return apps.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+        return appsByPath.values.sorted {
+            $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending
+        }
     }
 
     private func appInfo(from appURL: URL) -> AppInfo? {

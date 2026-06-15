@@ -1,5 +1,23 @@
 import SwiftUI
 
+private extension AppInfo {
+    func matchesGroupEditorQuery(_ query: String) -> Bool {
+        let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return true }
+
+        let haystack = [
+            name,
+            bundleIdentifier ?? "",
+            path.lastPathComponent,
+            path.path(percentEncoded: false)
+        ].joined(separator: " ")
+
+        return trimmed
+            .split(separator: " ")
+            .allSatisfy { haystack.localizedCaseInsensitiveContains($0) }
+    }
+}
+
 struct GroupEditorSheet: View {
     @Environment(DockViewModel.self) private var viewModel
     @Environment(\.dismiss) private var dismiss
@@ -59,12 +77,21 @@ struct GroupEditorSheet: View {
                     .textFieldStyle(.roundedBorder)
 
                 ScrollView {
-                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 70))], spacing: 8) {
-                        ForEach(filteredApps) { app in
-                            appTile(app)
+                    if filteredApps.isEmpty {
+                        ContentUnavailableView(
+                            "没有匹配的应用",
+                            systemImage: "magnifyingglass",
+                            description: Text("换个关键词试试")
+                        )
+                        .frame(maxWidth: .infinity, minHeight: 180)
+                    } else {
+                        LazyVGrid(columns: [GridItem(.adaptive(minimum: 70))], spacing: 8) {
+                            ForEach(filteredApps) { app in
+                                appTile(app)
+                            }
                         }
+                        .padding(.horizontal, 4)
                     }
-                    .padding(.horizontal, 4)
                 }
                 .frame(maxHeight: 240)
             }
@@ -135,12 +162,13 @@ struct GroupEditorSheet: View {
     }
 
     private var filteredApps: [AppInfo] {
-        if searchText.isEmpty {
-            return availableApps
-        }
-        return availableApps.filter {
-            $0.name.localizedCaseInsensitiveContains(searchText)
-            || ($0.bundleIdentifier?.localizedCaseInsensitiveContains(searchText) ?? false)
+        availableApps
+            .filter { $0.matchesGroupEditorQuery(searchText) }
+            .sorted { lhs, rhs in
+                let lhsSelected = selectedApps.contains(lhs.path)
+                let rhsSelected = selectedApps.contains(rhs.path)
+                if lhsSelected != rhsSelected { return lhsSelected }
+                return lhs.name.localizedCaseInsensitiveCompare(rhs.name) == .orderedAscending
         }
     }
 
