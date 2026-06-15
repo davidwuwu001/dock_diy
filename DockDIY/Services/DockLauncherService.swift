@@ -275,23 +275,13 @@ final class DockLauncherService {
         }
     }
 
-    private func menuWidth(for style: StackDisplayStyle) -> Int {
-        switch style {
-        case .auto: return 300
-        case .fan: return 320
-        case .grid: return 360
-        case .list: return 260
-        }
-    }
-
     private func popupURLString(for group: DockGroup) -> String {
         var components = URLComponents()
         components.scheme = "dockdiy"
         components.host = "popup"
         components.queryItems = [
             URLQueryItem(name: "name", value: group.name),
-            URLQueryItem(name: "path", value: normalizedPath(group.folderPath)),
-            URLQueryItem(name: "style", value: "\(group.showAs.rawValue)")
+            URLQueryItem(name: "path", value: normalizedPath(group.folderPath))
         ]
         return components.url?.absoluteString ?? "dockdiy://popup"
     }

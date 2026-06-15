@@ -13,10 +13,12 @@ struct DockPopupView: View {
     let title: String
     let folderURL: URL
     let style: StackDisplayStyle
+    let onStyleChange: (URL, StackDisplayStyle) -> Void
     let onClose: () -> Void
 
     @State private var items: [DockPopupItem] = []
     @State private var searchText = ""
+    @State private var selectedStyle: StackDisplayStyle = .grid
 
     var body: some View {
         VStack(spacing: 0) {
@@ -33,6 +35,9 @@ struct DockPopupView: View {
                 .stroke(Color.white.opacity(0.18), lineWidth: 1)
         )
         .onAppear(perform: loadItems)
+        .onAppear {
+            selectedStyle = normalized(style)
+        }
         .onExitCommand(perform: onClose)
     }
 
@@ -53,6 +58,19 @@ struct DockPopupView: View {
             }
 
             Spacer()
+
+            Picker("", selection: $selectedStyle) {
+                Image(systemName: "square.grid.2x2")
+                    .tag(StackDisplayStyle.grid)
+                Image(systemName: "list.bullet")
+                    .tag(StackDisplayStyle.list)
+            }
+            .pickerStyle(.segmented)
+            .labelsHidden()
+            .frame(width: 88)
+            .onChange(of: selectedStyle) { _, newValue in
+                onStyleChange(folderURL, newValue)
+            }
 
             Button(action: onClose) {
                 Image(systemName: "xmark")
@@ -91,7 +109,7 @@ struct DockPopupView: View {
                 systemImage: searchText.isEmpty ? "app.dashed" : "magnifyingglass"
             )
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-        } else if resolvedStyle == .list {
+        } else if selectedStyle == .list {
             listContent
         } else {
             gridContent
@@ -161,7 +179,7 @@ struct DockPopupView: View {
         }
     }
 
-    private var resolvedStyle: StackDisplayStyle {
+    private func normalized(_ style: StackDisplayStyle) -> StackDisplayStyle {
         switch style {
         case .auto, .fan, .grid:
             return .grid
@@ -171,7 +189,7 @@ struct DockPopupView: View {
     }
 
     private var displayModeIcon: String {
-        resolvedStyle == .list ? "list.bullet" : "square.grid.2x2"
+        selectedStyle == .list ? "list.bullet" : "square.grid.2x2"
     }
 
     private func loadItems() {

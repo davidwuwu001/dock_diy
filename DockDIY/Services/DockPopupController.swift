@@ -21,8 +21,10 @@ final class DockPopupController: NSObject, NSWindowDelegate {
         let name = items["name"] ?? "DockDIY"
         guard let path = items["path"] else { return }
         let styleValue = Int(items["style"] ?? "") ?? StackDisplayStyle.grid.rawValue
-        let style = StackDisplayStyle(rawValue: styleValue) ?? .grid
-        showPopup(name: name, folderURL: URL(fileURLWithPath: path), style: style)
+        let folderURL = URL(fileURLWithPath: path)
+        let fallbackStyle = StackDisplayStyle(rawValue: styleValue) ?? .grid
+        let style = GroupManager.shared.displayStyle(for: folderURL)
+        showPopup(name: name, folderURL: folderURL, style: style == .auto ? fallbackStyle : style)
     }
 
     func showPopup(name: String, folderURL: URL, style: StackDisplayStyle) {
@@ -32,6 +34,9 @@ final class DockPopupController: NSObject, NSWindowDelegate {
             title: name,
             folderURL: folderURL,
             style: style,
+            onStyleChange: { folderURL, style in
+                try? GroupManager.shared.updateDisplayStyle(for: folderURL, showAs: style)
+            },
             onClose: { [weak self] in self?.panel?.close() }
         )
         let hosting = NSHostingView(rootView: view)
@@ -76,4 +81,3 @@ final class DockPopupController: NSObject, NSWindowDelegate {
         panel.setFrameOrigin(NSPoint(x: x, y: min(y, visibleFrame.maxY - size.height - 12)))
     }
 }
-

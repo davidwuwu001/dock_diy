@@ -33,7 +33,7 @@ final class DockLauncherServiceTests: XCTestCase {
         XCTAssertTrue(script.contains("on reopen"))
         XCTAssertTrue(script.contains("open location \"dockdiy://popup?"))
         XCTAssertTrue(script.contains("path=/Applications"))
-        XCTAssertTrue(script.contains("style=2"))
+        XCTAssertFalse(script.contains("style="))
         XCTAssertFalse(script.contains("NSMenu"))
     }
 

@@ -48,6 +48,21 @@ final class GroupManager {
         try data.write(to: groupPath.appendingPathComponent(metadataFileName), options: .atomic)
     }
 
+    func displayStyle(for groupPath: URL) -> StackDisplayStyle {
+        loadMetadata(groupPath: groupPath)?.showAs ?? .grid
+    }
+
+    func updateDisplayStyle(for groupPath: URL, showAs: StackDisplayStyle) throws {
+        let metadata = loadMetadata(groupPath: groupPath)
+        try saveMetadata(
+            for: groupPath,
+            name: metadata?.name ?? groupPath.lastPathComponent,
+            showAs: showAs,
+            arrangement: metadata?.arrangement ?? .name,
+            iconSystemName: metadata?.iconSystemName ?? DockGroup.defaultIconSystemName
+        )
+    }
+
     func deleteGroupFolder(at path: URL) throws {
         if fileManager.fileExists(atPath: path.path(percentEncoded: false)) {
             try fileManager.removeItem(at: path)
@@ -142,7 +157,7 @@ final class GroupManager {
                 name: name,
                 folderPath: url,
                 members: scanGroupMembers(groupPath: url),
-                showAs: metadata?.showAs ?? .list,
+                showAs: metadata?.showAs ?? .grid,
                 arrangement: metadata?.arrangement ?? .name,
                 iconSystemName: metadata?.iconSystemName ?? DockGroup.defaultIconSystemName
             )

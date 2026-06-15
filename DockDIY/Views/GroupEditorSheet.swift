@@ -25,7 +25,6 @@ struct GroupEditorSheet: View {
     let group: DockGroup?
 
     @State private var name = ""
-    @State private var showAs: StackDisplayStyle = .auto
     @State private var arrangement: StackArrangement = .name
     @State private var iconSystemName = DockGroup.defaultIconSystemName
     @State private var selectedApps: Set<URL> = []
@@ -46,13 +45,6 @@ struct GroupEditorSheet: View {
 
             Form {
                 TextField("分组名称", text: $name)
-
-                Picker("显示方式", selection: $showAs) {
-                    ForEach(StackDisplayStyle.allCases) { style in
-                        Text(style.displayName).tag(style)
-                    }
-                }
-                .pickerStyle(.segmented)
 
                 Picker("排序方式", selection: $arrangement) {
                     ForEach(StackArrangement.allCases) { arr in
@@ -114,7 +106,7 @@ struct GroupEditorSheet: View {
                             group,
                             name: name,
                             apps: apps,
-                            showAs: showAs,
+                            showAs: group.showAs,
                             arrangement: arrangement,
                             iconSystemName: iconSystemName
                         )
@@ -124,7 +116,7 @@ struct GroupEditorSheet: View {
                         viewModel.createGroup(
                             name: name,
                             apps: apps,
-                            showAs: showAs,
+                            showAs: .grid,
                             arrangement: arrangement,
                             iconSystemName: iconSystemName
                         )
@@ -143,7 +135,6 @@ struct GroupEditorSheet: View {
             availableApps = AppDiscoveryService.shared.discoverApps()
             if let group {
                 name = group.name
-                showAs = group.showAs
                 arrangement = group.arrangement
                 iconSystemName = group.iconSystemName
                 selectedApps = Set(group.members.map(\.appPath))
