@@ -7,6 +7,11 @@ final class IconCache {
     private var cache: [String: NSImage] = [:]
     private let queue = DispatchQueue(label: "com.dockdiy.iconcache")
 
+    func cachedIcon(for path: URL) -> NSImage? {
+        let key = path.path(percentEncoded: false)
+        return queue.sync(execute: { cache[key] })
+    }
+
     func icon(for path: URL) -> NSImage? {
         let key = path.path(percentEncoded: false)
         if let cached = queue.sync(execute: { cache[key] }) {

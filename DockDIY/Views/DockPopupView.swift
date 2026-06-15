@@ -19,6 +19,7 @@ struct DockPopupView: View {
     @State private var items: [DockPopupItem] = []
     @State private var searchText = ""
     @State private var selectedStyle: StackDisplayStyle = .grid
+    @State private var isLoading = true
 
     var body: some View {
         VStack(spacing: 0) {
@@ -34,9 +35,9 @@ struct DockPopupView: View {
             RoundedRectangle(cornerRadius: 14, style: .continuous)
                 .stroke(Color.white.opacity(0.18), lineWidth: 1)
         )
-        .onAppear(perform: loadItems)
         .onAppear {
             selectedStyle = normalized(style)
+            loadItems()
         }
         .onExitCommand(perform: onClose)
     }
@@ -103,7 +104,17 @@ struct DockPopupView: View {
 
     @ViewBuilder
     private var content: some View {
-        if filteredItems.isEmpty {
+        if isLoading && items.isEmpty {
+            VStack(spacing: 10) {
+                ProgressView()
+                    .controlSize(.small)
+                Text("正在加载应用")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .transition(.opacity)
+        } else if filteredItems.isEmpty {
             ContentUnavailableView(
                 searchText.isEmpty ? "这个分组还没有应用" : "没有匹配的应用",
                 systemImage: searchText.isEmpty ? "app.dashed" : "magnifyingglass"
@@ -193,23 +204,58 @@ struct DockPopupView: View {
     }
 
     private func loadItems() {
-        let contents = (try? FileManager.default.contentsOfDirectory(
-            at: folderURL,
-            includingPropertiesForKeys: [.isSymbolicLinkKey],
-            options: [.skipsHiddenFiles]
-        )) ?? []
+        isLoading = true
+        let folderURL = folderURL
+        let placeholderIcon = NSWorkspace.shared.icon(forFileType: "app")
 
-        items = contents.compactMap { url in
-            guard (try? url.resourceValues(forKeys: [.isSymbolicLinkKey]).isSymbolicLink) == true,
-                  let target = try? FileManager.default.destinationOfSymbolicLink(atPath: url.path(percentEncoded: false)) else {
-                return nil
+        DispatchQueue.global(qos: .userInitiated).async {
+            let contents = (try? FileManager.default.contentsOfDirectory(
+                at: folderURL,
+                includingPropertiesForKeys: [.isSymbolicLinkKey],
+                options: [.skipsHiddenFiles]
+            )) ?? []
+
+            let entries: [(appURL: URL, label: String)] = contents.compactMap { url in
+                guard (try? url.resourceValues(forKeys: [.isSymbolicLinkKey]).isSymbolicLink) == true,
+                      let target = try? FileManager.default.destinationOfSymbolicLink(atPath: url.path(percentEncoded: false)) else {
+                    return nil
+                }
+                let appURL = URL(fileURLWithPath: target)
+                let label = appURL.deletingPathExtension().lastPathComponent
+                return (appURL, label)
             }
-            let appURL = URL(fileURLWithPath: target)
-            let label = appURL.deletingPathExtension().lastPathComponent
-            let icon = NSWorkspace.shared.icon(forFile: appURL.path(percentEncoded: false))
-            return DockPopupItem(appURL: appURL, label: label, icon: icon)
+            .sorted { $0.label.localizedCaseInsensitiveCompare($1.label) == .orderedAscending }
+
+            let cachedItems = entries.map { entry in
+                DockPopupItem(
+                    appURL: entry.appURL,
+                    label: entry.label,
+                    icon: IconCache.shared.cachedIcon(for: entry.appURL) ?? placeholderIcon
+                )
+            }
+
+            DispatchQueue.main.async {
+                withAnimation(.easeOut(duration: 0.12)) {
+                    items = cachedItems
+                    isLoading = false
+                }
+            }
+
+            let loadedItems = entries.map { entry in
+                DockPopupItem(
+                    appURL: entry.appURL,
+                    label: entry.label,
+                    icon: IconCache.shared.icon(for: entry.appURL) ?? placeholderIcon
+                )
+            }
+
+            DispatchQueue.main.async {
+                withAnimation(.easeOut(duration: 0.12)) {
+                    items = loadedItems
+                    isLoading = false
+                }
+            }
         }
-        .sorted { $0.label.localizedCaseInsensitiveCompare($1.label) == .orderedAscending }
     }
 
     private func open(_ item: DockPopupItem) {
