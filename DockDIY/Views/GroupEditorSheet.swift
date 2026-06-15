@@ -45,31 +45,28 @@ struct GroupEditorSheet: View {
             .formStyle(.grouped)
             .frame(maxHeight: 200)
 
-            if !isEditing {
-                // App selection for new group
-                VStack(alignment: .leading, spacing: 8) {
-                    HStack {
-                        Text("选择应用")
-                            .font(.headline)
-                        Spacer()
-                        Text("已选 \(selectedApps.count) 个")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-
-                    TextField("搜索应用...", text: $searchText)
-                        .textFieldStyle(.roundedBorder)
-
-                    ScrollView {
-                        LazyVGrid(columns: [GridItem(.adaptive(minimum: 70))], spacing: 8) {
-                            ForEach(filteredApps) { app in
-                                appTile(app)
-                            }
-                        }
-                        .padding(.horizontal, 4)
-                    }
-                    .frame(maxHeight: 240)
+            VStack(alignment: .leading, spacing: 8) {
+                HStack {
+                    Text("选择应用")
+                        .font(.headline)
+                    Spacer()
+                    Text("已选 \(selectedApps.count) 个")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
                 }
+
+                TextField("搜索应用...", text: $searchText)
+                    .textFieldStyle(.roundedBorder)
+
+                ScrollView {
+                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 70))], spacing: 8) {
+                        ForEach(filteredApps) { app in
+                            appTile(app)
+                        }
+                    }
+                    .padding(.horizontal, 4)
+                }
+                .frame(maxHeight: 240)
             }
 
             HStack {
@@ -82,9 +79,11 @@ struct GroupEditorSheet: View {
 
                 Button(isEditing ? "保存" : "创建") {
                     if isEditing, let group {
+                        let apps = availableApps.filter { selectedApps.contains($0.path) }
                         viewModel.updateGroup(
                             group,
                             name: name,
+                            apps: apps,
                             showAs: showAs,
                             arrangement: arrangement
                         )
@@ -102,7 +101,7 @@ struct GroupEditorSheet: View {
                 }
                 .keyboardShortcut(.defaultAction)
                 .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty
-                          || (!isEditing && selectedApps.isEmpty))
+                          || selectedApps.isEmpty)
                 .buttonStyle(.borderedProminent)
             }
         }
@@ -114,7 +113,24 @@ struct GroupEditorSheet: View {
                 name = group.name
                 showAs = group.showAs
                 arrangement = group.arrangement
+                selectedApps = Set(group.members.map(\.appPath))
+                mergeExistingMembers(group.members)
             }
+        }
+    }
+
+    private func mergeExistingMembers(_ members: [DockGroupMember]) {
+        var appsByPath = Dictionary(uniqueKeysWithValues: availableApps.map { ($0.path, $0) })
+        for member in members where appsByPath[member.appPath] == nil {
+            appsByPath[member.appPath] = AppInfo(
+                name: member.label,
+                path: member.appPath,
+                bundleIdentifier: member.bundleIdentifier,
+                icon: member.icon
+            )
+        }
+        availableApps = appsByPath.values.sorted {
+            $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending
         }
     }
 

@@ -52,6 +52,19 @@ struct DockLayoutView: View {
                         .padding(.vertical, 8)
                     }
 
+                    if !layout.recentApps.isEmpty {
+                        Divider()
+                            .padding(.vertical, 4)
+
+                        sectionHeader(
+                            "最近应用区",
+                            subtitle: "系统维护的最近应用，Dock 实际位置由 macOS 控制",
+                            count: layout.recentApps.count
+                        )
+
+                        DockReadOnlySectionView(items: layout.recentApps)
+                    }
+
                     Spacer(minLength: 40)
                 } else {
                     ContentUnavailableView(
@@ -119,6 +132,60 @@ struct DockLayoutView: View {
                 .controlSize(.small)
                 .help(actionTitle)
             }
+        }
+    }
+}
+
+// MARK: - DockReadOnlySectionView
+
+struct DockReadOnlySectionView: View {
+    let items: [DockItem]
+
+    var body: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 8) {
+                ForEach(items) { item in
+                    DockReadOnlyItemView(item: item)
+                }
+            }
+            .padding(.horizontal, 4)
+        }
+        .frame(minHeight: 80)
+    }
+}
+
+struct DockReadOnlyItemView: View {
+    let item: DockItem
+
+    var body: some View {
+        VStack(spacing: 4) {
+            iconView(size: 52)
+            Text(item.label)
+                .font(.system(size: 10))
+                .lineLimit(1)
+                .frame(maxWidth: 64)
+        }
+        .padding(6)
+        .contentShape(Rectangle())
+        .contextMenu {
+            Button("在 Finder 中显示") {
+                NSWorkspace.shared.activateFileViewerSelecting([item.path])
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func iconView(size: CGFloat) -> some View {
+        if let nsImage = item.icon {
+            Image(nsImage: nsImage)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: size, height: size)
+        } else {
+            Image(systemName: "app")
+                .font(.system(size: size * 0.55))
+                .foregroundStyle(.secondary)
+                .frame(width: size, height: size)
         }
     }
 }
@@ -218,7 +285,12 @@ struct DockSectionView: View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 8) {
                 ForEach(Array(items.enumerated()), id: \.element.id) { index, item in
-                    DockItemView(item: item, section: section, index: index)
+                    DockItemView(
+                        item: item,
+                        section: section,
+                        index: index,
+                        itemCount: items.count
+                    )
                 }
             }
             .padding(.horizontal, 4)

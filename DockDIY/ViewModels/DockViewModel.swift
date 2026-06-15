@@ -82,16 +82,38 @@ final class DockViewModel {
             var items = layout.persistentApps
             guard sourceIndex < items.count else { return }
             let item = items.remove(at: sourceIndex)
-            let adjustedTarget = targetIndex > sourceIndex ? targetIndex - 1 : targetIndex
-            items.insert(item, at: min(adjustedTarget, items.count))
+            items.insert(item, at: min(targetIndex, items.count))
             self.layout?.persistentApps = items
         case .others:
             var items = layout.persistentOthers
             guard sourceIndex < items.count else { return }
             let item = items.remove(at: sourceIndex)
-            let adjustedTarget = targetIndex > sourceIndex ? targetIndex - 1 : targetIndex
-            items.insert(item, at: min(adjustedTarget, items.count))
+            items.insert(item, at: min(targetIndex, items.count))
             self.layout?.persistentOthers = items
+        }
+        hasUnsavedChanges = true
+    }
+
+    func moveItemByOffset(_ itemId: UInt32, in section: DockSection, offset: Int) {
+        guard layout != nil, offset != 0 else { return }
+
+        func moved(_ items: [DockItem]) -> [DockItem] {
+            var next = items
+            guard let sourceIndex = next.firstIndex(where: { $0.guid == itemId }) else {
+                return items
+            }
+            let targetIndex = max(0, min(sourceIndex + offset, next.count - 1))
+            guard targetIndex != sourceIndex else { return items }
+            let item = next.remove(at: sourceIndex)
+            next.insert(item, at: targetIndex)
+            return next
+        }
+
+        switch section {
+        case .apps:
+            self.layout?.persistentApps = moved(self.layout?.persistentApps ?? [])
+        case .others:
+            self.layout?.persistentOthers = moved(self.layout?.persistentOthers ?? [])
         }
         hasUnsavedChanges = true
     }
@@ -270,7 +292,7 @@ final class DockViewModel {
         }
     }
 
-    func updateGroup(_ group: DockGroup, name: String,
+    func updateGroup(_ group: DockGroup, name: String, apps: [AppInfo],
                      showAs: StackDisplayStyle, arrangement: StackArrangement) {
         do {
             let trimmedName = name.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -303,6 +325,23 @@ final class DockViewModel {
                 next.loadIcon()
                 return next
             } ?? []
+
+            let selectedPaths = Set(apps.map(\.path))
+            for member in groupManager.scanGroupMembers(groupPath: folderPath) {
+                if !selectedPaths.contains(member.appPath) {
+                    try groupManager.removeAppFromGroup(
+                        groupPath: folderPath,
+                        appName: member.symlinkPath.lastPathComponent
+                    )
+                }
+            }
+
+            let existingPaths = Set(
+                groupManager.scanGroupMembers(groupPath: folderPath).map(\.appPath)
+            )
+            for app in apps where !existingPaths.contains(app.path) {
+                try groupManager.addAppToGroup(groupPath: folderPath, appPath: app.path)
+            }
 
             hasUnsavedChanges = true
             loadGroups()

@@ -5,6 +5,7 @@ struct DockItemView: View {
     let item: DockItem
     let section: DockSection
     let index: Int
+    let itemCount: Int
     @State private var isHovered = false
 
     var body: some View {
@@ -72,6 +73,16 @@ struct DockItemView: View {
                     viewModel.showDockItemEditor = true
                 }
             }
+
+            Button("向左移动") {
+                viewModel.moveItemByOffset(item.guid, in: section, offset: -1)
+            }
+            .disabled(index == 0)
+
+            Button("向右移动") {
+                viewModel.moveItemByOffset(item.guid, in: section, offset: 1)
+            }
+            .disabled(index >= itemCount - 1)
 
             Button("从 Dock 移除") {
                 viewModel.removeItem(item.guid, from: section)
