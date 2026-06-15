@@ -41,6 +41,18 @@ struct DockLayoutView: View {
                         section: .others
                     )
 
+                    if let selectedGroup {
+                        DockGroupView(group: selectedGroup)
+                            .background(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .fill(Color(nsColor: .controlBackgroundColor))
+                            )
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 8)
+                                    .strokeBorder(Color.secondary.opacity(0.18))
+                            )
+                    }
+
                     if layout.persistentOthers.isEmpty {
                         HStack {
                             Image(systemName: "info.circle")
@@ -106,6 +118,11 @@ struct DockLayoutView: View {
         .sheet(isPresented: $showGuide) {
             GuideSheet()
         }
+    }
+
+    private var selectedGroup: DockGroup? {
+        guard let selectedGroupId = viewModel.selectedGroupId else { return nil }
+        return viewModel.groups.first { $0.id == selectedGroupId }
     }
 
     private func sectionHeader(_ title: String, subtitle: String, count: Int,
