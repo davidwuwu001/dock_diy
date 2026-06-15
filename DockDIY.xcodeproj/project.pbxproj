@@ -1,0 +1,528 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 54;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1CA594D0D91B3F82AD01EA50 /* DockTransferable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B70B99576D468310A25F7C15 /* DockTransferable.swift */; };
+		2509AAE0E51415BE186B2786 /* DockGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 461CE08C258B75D093764610 /* DockGroup.swift */; };
+		29CC7838BDD0527D86524EF5 /* DockItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEDB074B846CD1979C1489FB /* DockItem.swift */; };
+		4006EB9389AAC9DDD174AB7E /* AppDiscoveryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 643DB609498DE22AFC6A63B7 /* AppDiscoveryService.swift */; };
+		4D9E54FC7C1D32B470A7818E /* DockPlistService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4F599DA2A85A77BF04A924 /* DockPlistService.swift */; };
+		5C0B4075611E436192F5D87A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7EAED160D8757FC6E62FB0 /* ContentView.swift */; };
+		60196C469B8221342F91C2C6 /* GroupManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3630E744E39FFC14123909 /* GroupManager.swift */; };
+		73453046B29370043CBC6C0A /* SidebarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA4693ECC334FF7EF8B5F9A4 /* SidebarView.swift */; };
+		76DF07C8C2290BBAE9873AAF /* GroupEditorSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F27264E652631DB114FCA9DC /* GroupEditorSheet.swift */; };
+		77DE4489ADCB751B560956DD /* DockGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67D6C64545D070554E836028 /* DockGroupView.swift */; };
+		8AE82F3E63B9ED8F2816E3A4 /* DockItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D44788BE30180C76FE45619A /* DockItemView.swift */; };
+		92C23A89F0F17CFC9386A48A /* IconCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F739CA240C81D5F51ABDDD2 /* IconCache.swift */; };
+		9E8740137D8454863DCB334E /* DockLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E888A46A6C530172FDAAA4 /* DockLayout.swift */; };
+		A2CA9EE2A076C3C78EA9586D /* AppPickerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246D3912DB2348CB8DBA0D25 /* AppPickerSheet.swift */; };
+		A51EB590F06C8206CDE62D76 /* DockDIYApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D982D490F1B76062234135 /* DockDIYApp.swift */; };
+		C5BE4D07C4EA8F90C992D7F6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A8B96380DF7FF4E788A4E9F3 /* Assets.xcassets */; };
+		C674B64EAF77CD494349A6AA /* DockViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C5E04A952DB6A8BBC845821 /* DockViewModel.swift */; };
+		C6D977B9455E2B7BA161DEE1 /* DockLayoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 344EF471C2EF0906312E0C59 /* DockLayoutView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		68C800FF1BAC3679A4B05524 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9974EE270F2F5BFA0E57150B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F928DB7BFDFCDE321388BF26;
+			remoteInfo = DockDIY;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		1F739CA240C81D5F51ABDDD2 /* IconCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconCache.swift; sourceTree = "<group>"; };
+		246D3912DB2348CB8DBA0D25 /* AppPickerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPickerSheet.swift; sourceTree = "<group>"; };
+		249A4F33B881A2A50DBD4129 /* DockDIY.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DockDIY.entitlements; sourceTree = "<group>"; };
+		344EF471C2EF0906312E0C59 /* DockLayoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockLayoutView.swift; sourceTree = "<group>"; };
+		461CE08C258B75D093764610 /* DockGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockGroup.swift; sourceTree = "<group>"; };
+		4B95288CDFD3C9F326EDC295 /* DockDIY.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DockDIY.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		5C5E04A952DB6A8BBC845821 /* DockViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockViewModel.swift; sourceTree = "<group>"; };
+		643DB609498DE22AFC6A63B7 /* AppDiscoveryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDiscoveryService.swift; sourceTree = "<group>"; };
+		67D6C64545D070554E836028 /* DockGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockGroupView.swift; sourceTree = "<group>"; };
+		6D4F599DA2A85A77BF04A924 /* DockPlistService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockPlistService.swift; sourceTree = "<group>"; };
+		7C7EAED160D8757FC6E62FB0 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		86E888A46A6C530172FDAAA4 /* DockLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockLayout.swift; sourceTree = "<group>"; };
+		A8B96380DF7FF4E788A4E9F3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		AEDB074B846CD1979C1489FB /* DockItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockItem.swift; sourceTree = "<group>"; };
+		B70B99576D468310A25F7C15 /* DockTransferable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockTransferable.swift; sourceTree = "<group>"; };
+		BB3630E744E39FFC14123909 /* GroupManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupManager.swift; sourceTree = "<group>"; };
+		D2D982D490F1B76062234135 /* DockDIYApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockDIYApp.swift; sourceTree = "<group>"; };
+		D44788BE30180C76FE45619A /* DockItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockItemView.swift; sourceTree = "<group>"; };
+		D6FCA5A56F3EBC29BAA4C136 /* DockDIYTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DockDIYTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		DA4693ECC334FF7EF8B5F9A4 /* SidebarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarView.swift; sourceTree = "<group>"; };
+		F27264E652631DB114FCA9DC /* GroupEditorSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupEditorSheet.swift; sourceTree = "<group>"; };
+		F9F7F757D37B9B9057DB2961 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		1B2FC299C333B368FD56878E /* DockDIY */ = {
+			isa = PBXGroup;
+			children = (
+				249A4F33B881A2A50DBD4129 /* DockDIY.entitlements */,
+				D2D982D490F1B76062234135 /* DockDIYApp.swift */,
+				F9F7F757D37B9B9057DB2961 /* Info.plist */,
+				FD33C9872AE2CAC993BCEF82 /* Models */,
+				A06C4892C4902590770A0936 /* Resources */,
+				AE0A81921D3C4E05B1B81352 /* Services */,
+				67D36FD43F90F26810E978E8 /* Utilities */,
+				34B29DAED2CC05CC0739E803 /* ViewModels */,
+				4DC0F18044DBFE1663A5D9D0 /* Views */,
+			);
+			path = DockDIY;
+			sourceTree = "<group>";
+		};
+		34B29DAED2CC05CC0739E803 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				5C5E04A952DB6A8BBC845821 /* DockViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		4DC0F18044DBFE1663A5D9D0 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				246D3912DB2348CB8DBA0D25 /* AppPickerSheet.swift */,
+				7C7EAED160D8757FC6E62FB0 /* ContentView.swift */,
+				67D6C64545D070554E836028 /* DockGroupView.swift */,
+				D44788BE30180C76FE45619A /* DockItemView.swift */,
+				344EF471C2EF0906312E0C59 /* DockLayoutView.swift */,
+				F27264E652631DB114FCA9DC /* GroupEditorSheet.swift */,
+				DA4693ECC334FF7EF8B5F9A4 /* SidebarView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		67D36FD43F90F26810E978E8 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				B70B99576D468310A25F7C15 /* DockTransferable.swift */,
+				1F739CA240C81D5F51ABDDD2 /* IconCache.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		6FFFB971E1AF6BCC32FC29BF = {
+			isa = PBXGroup;
+			children = (
+				1B2FC299C333B368FD56878E /* DockDIY */,
+				AB0F1DD3E26C653EEBDB1948 /* DockDIYTests */,
+				9293185EB37608B534235AA6 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		9293185EB37608B534235AA6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4B95288CDFD3C9F326EDC295 /* DockDIY.app */,
+				D6FCA5A56F3EBC29BAA4C136 /* DockDIYTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A06C4892C4902590770A0936 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A8B96380DF7FF4E788A4E9F3 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		AB0F1DD3E26C653EEBDB1948 /* DockDIYTests */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = DockDIYTests;
+			sourceTree = "<group>";
+		};
+		AE0A81921D3C4E05B1B81352 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				643DB609498DE22AFC6A63B7 /* AppDiscoveryService.swift */,
+				6D4F599DA2A85A77BF04A924 /* DockPlistService.swift */,
+				BB3630E744E39FFC14123909 /* GroupManager.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		FD33C9872AE2CAC993BCEF82 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				461CE08C258B75D093764610 /* DockGroup.swift */,
+				AEDB074B846CD1979C1489FB /* DockItem.swift */,
+				86E888A46A6C530172FDAAA4 /* DockLayout.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		2BAED8C57B080F2CB43EC225 /* DockDIYTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BF6E50DBBE08DD1A90290A4F /* Build configuration list for PBXNativeTarget "DockDIYTests" */;
+			buildPhases = (
+				3FFF37AF3E4A254803B0505D /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AC189BF359216DDEB52F9578 /* PBXTargetDependency */,
+			);
+			name = DockDIYTests;
+			packageProductDependencies = (
+			);
+			productName = DockDIYTests;
+			productReference = D6FCA5A56F3EBC29BAA4C136 /* DockDIYTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		F928DB7BFDFCDE321388BF26 /* DockDIY */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EF7CD116F136AA4088B59B2A /* Build configuration list for PBXNativeTarget "DockDIY" */;
+			buildPhases = (
+				7EB13DFF2CCF0FED2FF41B86 /* Sources */,
+				AA8D2394F674B53328B62A39 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DockDIY;
+			packageProductDependencies = (
+			);
+			productName = DockDIY;
+			productReference = 4B95288CDFD3C9F326EDC295 /* DockDIY.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		9974EE270F2F5BFA0E57150B /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+				};
+			};
+			buildConfigurationList = 73AA87FCCE6C1C0123287586 /* Build configuration list for PBXProject "DockDIY" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 6FFFB971E1AF6BCC32FC29BF;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 54;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				F928DB7BFDFCDE321388BF26 /* DockDIY */,
+				2BAED8C57B080F2CB43EC225 /* DockDIYTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		AA8D2394F674B53328B62A39 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C5BE4D07C4EA8F90C992D7F6 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		3FFF37AF3E4A254803B0505D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7EB13DFF2CCF0FED2FF41B86 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4006EB9389AAC9DDD174AB7E /* AppDiscoveryService.swift in Sources */,
+				A2CA9EE2A076C3C78EA9586D /* AppPickerSheet.swift in Sources */,
+				5C0B4075611E436192F5D87A /* ContentView.swift in Sources */,
+				A51EB590F06C8206CDE62D76 /* DockDIYApp.swift in Sources */,
+				2509AAE0E51415BE186B2786 /* DockGroup.swift in Sources */,
+				77DE4489ADCB751B560956DD /* DockGroupView.swift in Sources */,
+				29CC7838BDD0527D86524EF5 /* DockItem.swift in Sources */,
+				8AE82F3E63B9ED8F2816E3A4 /* DockItemView.swift in Sources */,
+				9E8740137D8454863DCB334E /* DockLayout.swift in Sources */,
+				C6D977B9455E2B7BA161DEE1 /* DockLayoutView.swift in Sources */,
+				4D9E54FC7C1D32B470A7818E /* DockPlistService.swift in Sources */,
+				1CA594D0D91B3F82AD01EA50 /* DockTransferable.swift in Sources */,
+				C674B64EAF77CD494349A6AA /* DockViewModel.swift in Sources */,
+				76DF07C8C2290BBAE9873AAF /* GroupEditorSheet.swift in Sources */,
+				60196C469B8221342F91C2C6 /* GroupManager.swift in Sources */,
+				92C23A89F0F17CFC9386A48A /* IconCache.swift in Sources */,
+				73453046B29370043CBC6C0A /* SidebarView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		AC189BF359216DDEB52F9578 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F928DB7BFDFCDE321388BF26 /* DockDIY */;
+			targetProxy = 68C800FF1BAC3679A4B05524 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		0DE455354576141F30357A74 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		56C53AF5574553DE4CD39D43 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_ENTITLEMENTS = DockDIY/DockDIY.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_FILE = DockDIY/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dockdiy.app;
+				PRODUCT_NAME = DockDIY;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
+		7ABCE00DE43BB49E5C462F30 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		8D1B6C1BC525DF90DA49852F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dockdiy.tests;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.9;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DockDIY.app/Contents/MacOS/DockDIY";
+			};
+			name = Release;
+		};
+		93AB3D9F890396BF1673DB02 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_ENTITLEMENTS = DockDIY/DockDIY.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_FILE = DockDIY/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dockdiy.app;
+				PRODUCT_NAME = DockDIY;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+		BB3944F50BE7AD65F7A79854 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.dockdiy.tests;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.9;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/DockDIY.app/Contents/MacOS/DockDIY";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		73AA87FCCE6C1C0123287586 /* Build configuration list for PBXProject "DockDIY" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7ABCE00DE43BB49E5C462F30 /* Debug */,
+				0DE455354576141F30357A74 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BF6E50DBBE08DD1A90290A4F /* Build configuration list for PBXNativeTarget "DockDIYTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BB3944F50BE7AD65F7A79854 /* Debug */,
+				8D1B6C1BC525DF90DA49852F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		EF7CD116F136AA4088B59B2A /* Build configuration list for PBXNativeTarget "DockDIY" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				93AB3D9F890396BF1673DB02 /* Debug */,
+				56C53AF5574553DE4CD39D43 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 9974EE270F2F5BFA0E57150B /* Project object */;
+}
