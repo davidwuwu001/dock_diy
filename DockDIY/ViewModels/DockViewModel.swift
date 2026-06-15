@@ -97,25 +97,35 @@ final class DockViewModel {
     func moveItemByOffset(_ itemId: UInt32, in section: DockSection, offset: Int) {
         guard layout != nil, offset != 0 else { return }
 
-        func moved(_ items: [DockItem]) -> [DockItem] {
-            var next = items
-            guard let sourceIndex = next.firstIndex(where: { $0.guid == itemId }) else {
-                return items
+        func move(_ items: inout [DockItem]) -> Bool {
+            guard let sourceIndex = items.firstIndex(where: { $0.guid == itemId }) else {
+                return false
             }
-            let targetIndex = max(0, min(sourceIndex + offset, next.count - 1))
-            guard targetIndex != sourceIndex else { return items }
-            let item = next.remove(at: sourceIndex)
-            next.insert(item, at: targetIndex)
-            return next
+            let targetIndex = max(0, min(sourceIndex + offset, items.count - 1))
+            guard targetIndex != sourceIndex else { return false }
+            let item = items.remove(at: sourceIndex)
+            items.insert(item, at: targetIndex)
+            return true
         }
 
+        var didMove = false
         switch section {
         case .apps:
-            self.layout?.persistentApps = moved(self.layout?.persistentApps ?? [])
+            var items = layout?.persistentApps ?? []
+            didMove = move(&items)
+            if didMove {
+                self.layout?.persistentApps = items
+            }
         case .others:
-            self.layout?.persistentOthers = moved(self.layout?.persistentOthers ?? [])
+            var items = layout?.persistentOthers ?? []
+            didMove = move(&items)
+            if didMove {
+                self.layout?.persistentOthers = items
+            }
         }
-        hasUnsavedChanges = true
+        if didMove {
+            hasUnsavedChanges = true
+        }
     }
 
     func moveItemAcrossSections(itemId: UInt32, from source: DockSection, to target: DockSection) {
@@ -304,7 +314,7 @@ final class DockViewModel {
                 folderPath = groupManager.groupsDirectory.appendingPathComponent(trimmedName)
             }
 
-            self.layout?.persistentOthers = self.layout?.persistentOthers.map { item in
+            let updatedOthers = (layout?.persistentOthers ?? []).map { item in
                 guard item.tileType == .directory && item.path == group.folderPath else {
                     return item
                 }
@@ -324,7 +334,8 @@ final class DockViewModel {
                 }
                 next.loadIcon()
                 return next
-            } ?? []
+            }
+            self.layout?.persistentOthers = updatedOthers
 
             let selectedPaths = Set(apps.map(\.path))
             for member in groupManager.scanGroupMembers(groupPath: folderPath) {
