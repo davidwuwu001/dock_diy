@@ -164,7 +164,7 @@ struct DockAppPickerSheet: View {
     var body: some View {
         VStack(spacing: 16) {
             HStack {
-                Text(section == .apps ? "添加应用到 Dock 左侧" : "添加项目到 Dock 右侧")
+                Text("添加应用到 Dock 左侧")
                     .font(.title2)
                     .bold()
                 Spacer()
@@ -222,9 +222,7 @@ struct DockAppPickerSheet: View {
         let allApps = AppDiscoveryService.shared.discoverApps()
         let existingPaths: Set<URL>
         if let layout = viewModel.layout {
-            existingPaths = Set((section == .apps
-                                 ? layout.persistentApps
-                                 : layout.persistentOthers).map(\.path))
+            existingPaths = Set(layout.persistentApps.map(\.path))
         } else {
             existingPaths = []
         }

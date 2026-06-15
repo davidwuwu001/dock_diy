@@ -27,6 +27,7 @@ struct GroupEditorSheet: View {
     @State private var name = ""
     @State private var showAs: StackDisplayStyle = .auto
     @State private var arrangement: StackArrangement = .name
+    @State private var iconSystemName = DockGroup.defaultIconSystemName
     @State private var selectedApps: Set<URL> = []
     @State private var availableApps: [AppInfo] = []
     @State private var searchText = ""
@@ -61,7 +62,9 @@ struct GroupEditorSheet: View {
                 .pickerStyle(.menu)
             }
             .formStyle(.grouped)
-            .frame(maxHeight: 200)
+            .frame(maxHeight: 180)
+
+            iconPickerSection(title: "选择 Dock 图标")
 
             VStack(alignment: .leading, spacing: 8) {
                 HStack {
@@ -112,7 +115,8 @@ struct GroupEditorSheet: View {
                             name: name,
                             apps: apps,
                             showAs: showAs,
-                            arrangement: arrangement
+                            arrangement: arrangement,
+                            iconSystemName: iconSystemName
                         )
                         dismiss()
                     } else {
@@ -121,7 +125,8 @@ struct GroupEditorSheet: View {
                             name: name,
                             apps: apps,
                             showAs: showAs,
-                            arrangement: arrangement
+                            arrangement: arrangement,
+                            iconSystemName: iconSystemName
                         )
                         dismiss()
                     }
@@ -140,6 +145,7 @@ struct GroupEditorSheet: View {
                 name = group.name
                 showAs = group.showAs
                 arrangement = group.arrangement
+                iconSystemName = group.iconSystemName
                 selectedApps = Set(group.members.map(\.appPath))
                 mergeExistingMembers(group.members)
             }
@@ -169,6 +175,55 @@ struct GroupEditorSheet: View {
                 let rhsSelected = selectedApps.contains(rhs.path)
                 if lhsSelected != rhsSelected { return lhsSelected }
                 return lhs.name.localizedCaseInsensitiveCompare(rhs.name) == .orderedAscending
+        }
+    }
+
+    private func iconOptionButton(_ option: GroupIconOption) -> some View {
+        let isSelected = iconSystemName == option.systemName
+        return Button {
+            iconSystemName = option.systemName
+        } label: {
+            VStack(spacing: 4) {
+                Image(systemName: option.systemName)
+                    .font(.system(size: 20, weight: .semibold))
+                    .frame(width: 30, height: 24)
+                Text(option.displayName)
+                    .font(.system(size: 10))
+                    .lineLimit(1)
+            }
+            .frame(width: 54, height: 48)
+            .background(
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(isSelected ? Color.accentColor.opacity(0.16) : Color.clear)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(isSelected ? Color.accentColor : Color.secondary.opacity(0.18), lineWidth: 1)
+            )
+        }
+        .buttonStyle(.plain)
+        .help(option.displayName)
+    }
+
+    private func iconPickerSection(title: String) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Text(title)
+                    .font(.headline)
+                Spacer()
+                Image(systemName: iconSystemName)
+                    .foregroundStyle(.tint)
+                    .frame(width: 22)
+                Text(DockGroup.iconOptions.first { $0.systemName == iconSystemName }?.displayName ?? "通用")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 58))], spacing: 8) {
+                ForEach(DockGroup.iconOptions) { option in
+                    iconOptionButton(option)
+                }
+            }
         }
     }
 

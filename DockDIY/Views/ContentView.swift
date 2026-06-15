@@ -19,6 +19,9 @@ struct ContentView: View {
         .onAppear {
             viewModel.loadDockLayout()
         }
+        .onOpenURL { url in
+            DockPopupController.shared.handle(url)
+        }
         .alert("错误", isPresented: $vm.showError) {
             Button("确定") { vm.showError = false }
         } message: {

@@ -29,6 +29,7 @@ final class DockViewModel {
 
     private let plistService = DockPlistService.shared
     private let groupManager = GroupManager.shared
+    private let dockLauncherService = DockLauncherService.shared
 
     // MARK: - Load
 
@@ -54,23 +55,16 @@ final class DockViewModel {
     }
 
     private func loadGroups() {
-        guard let layout else { return }
-        groups = layout.persistentOthers
-            .filter { $0.tileType == .directory }
-            .compactMap { item -> DockGroup? in
-                let members = groupManager.scanGroupMembers(groupPath: item.path)
-                let tileData = item.rawPlistData["tile-data"] as? [String: Any] ?? [:]
-                let showAsRaw = tileData["showas"] as? Int ?? 0
-                let arrangementRaw = tileData["arrangement"] as? Int ?? 1
+        groups = Self.visibleGroups(
+            managedGroups: groupManager.scanManagedGroups(),
+            layout: layout
+        )
+    }
 
-                return DockGroup(
-                    name: item.label,
-                    folderPath: item.path,
-                    members: members,
-                    showAs: StackDisplayStyle(rawValue: showAsRaw) ?? .auto,
-                    arrangement: StackArrangement(rawValue: arrangementRaw) ?? .name
-                )
-            }
+    static func visibleGroups(managedGroups: [DockGroup], layout: DockLayout?) -> [DockGroup] {
+        managedGroups.sorted {
+            $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending
+        }
     }
 
     // MARK: - Move Items
@@ -243,46 +237,21 @@ final class DockViewModel {
 
     func createGroup(name: String, apps: [AppInfo],
                      showAs: StackDisplayStyle = .auto,
-                     arrangement: StackArrangement = .name) {
+                     arrangement: StackArrangement = .name,
+                     iconSystemName: String = DockGroup.defaultIconSystemName) {
         do {
             let folderURL = try groupManager.createGroupFolder(name: name)
 
             for app in apps {
                 try groupManager.addAppToGroup(groupPath: folderURL, appPath: app.path)
             }
-
-            guard let layout else { return }
-            let guid = DockItem.generateGUID(excluding: layout.allGUIDs)
-
-            let rawDict: [String: Any] = [
-                "GUID": guid,
-                "tile-type": "directory-tile",
-                "tile-data": [
-                    "file-data": [
-                        "_CFURLString": "file://\(folderURL.path(percentEncoded: false))",
-                        "_CFURLStringType": 15
-                    ] as [String: Any],
-                    "file-label": name,
-                    "file-type": 2,
-                    "arrangement": arrangement.rawValue,
-                    "displayas": 0,
-                    "showas": showAs.rawValue
-                ] as [String: Any]
-            ]
-
-            var item = DockItem(
-                guid: guid,
-                tileType: .directory,
-                label: name,
-                path: folderURL,
-                rawPlistData: rawDict
+            try groupManager.saveMetadata(
+                for: folderURL,
+                name: name,
+                showAs: showAs,
+                arrangement: arrangement,
+                iconSystemName: iconSystemName
             )
-            item.loadIcon()
-
-            var others = layout.persistentOthers
-            others.append(item)
-            self.layout?.persistentOthers = others
-            hasUnsavedChanges = true
             loadGroups()
         } catch {
             presentError(error, recovery: recoverySuggestion(for: error))
@@ -292,10 +261,6 @@ final class DockViewModel {
     func deleteGroup(_ group: DockGroup) {
         do {
             try groupManager.deleteGroupFolder(at: group.folderPath)
-            self.layout?.persistentOthers.removeAll {
-                $0.tileType == .directory && $0.label == group.name
-            }
-            hasUnsavedChanges = true
             loadGroups()
         } catch {
             presentError(error, recovery: recoverySuggestion(for: error))
@@ -303,7 +268,8 @@ final class DockViewModel {
     }
 
     func updateGroup(_ group: DockGroup, name: String, apps: [AppInfo],
-                     showAs: StackDisplayStyle, arrangement: StackArrangement) {
+                     showAs: StackDisplayStyle, arrangement: StackArrangement,
+                     iconSystemName: String = DockGroup.defaultIconSystemName) {
         do {
             let trimmedName = name.trimmingCharacters(in: .whitespacesAndNewlines)
             guard !trimmedName.isEmpty else { return }
@@ -313,29 +279,13 @@ final class DockViewModel {
                 try groupManager.renameGroup(oldName: group.name, newName: trimmedName)
                 folderPath = groupManager.groupsDirectory.appendingPathComponent(trimmedName)
             }
-
-            let updatedOthers = (layout?.persistentOthers ?? []).map { item in
-                guard item.tileType == .directory && item.path == group.folderPath else {
-                    return item
-                }
-
-                var next = item
-                next.label = trimmedName
-                next.path = folderPath
-                if var tileData = next.rawPlistData["tile-data"] as? [String: Any] {
-                    tileData["file-label"] = trimmedName
-                    tileData["arrangement"] = arrangement.rawValue
-                    tileData["showas"] = showAs.rawValue
-                    var fileData = tileData["file-data"] as? [String: Any] ?? [:]
-                    fileData["_CFURLString"] = "file://\(folderPath.path(percentEncoded: false))"
-                    fileData["_CFURLStringType"] = 15
-                    tileData["file-data"] = fileData
-                    next.rawPlistData["tile-data"] = tileData
-                }
-                next.loadIcon()
-                return next
-            }
-            self.layout?.persistentOthers = updatedOthers
+            try groupManager.saveMetadata(
+                for: folderPath,
+                name: trimmedName,
+                showAs: showAs,
+                arrangement: arrangement,
+                iconSystemName: iconSystemName
+            )
 
             let selectedPaths = Set(apps.map(\.path))
             for member in groupManager.scanGroupMembers(groupPath: folderPath) {
@@ -354,11 +304,70 @@ final class DockViewModel {
                 try groupManager.addAppToGroup(groupPath: folderPath, appPath: app.path)
             }
 
-            hasUnsavedChanges = true
+            updateExistingLauncherIfNeeded(
+                group: DockGroup(
+                    id: group.id,
+                    name: trimmedName,
+                    folderPath: folderPath,
+                    members: groupManager.scanGroupMembers(groupPath: folderPath),
+                    showAs: showAs,
+                    arrangement: arrangement,
+                    iconSystemName: iconSystemName
+                )
+            )
             loadGroups()
         } catch {
             presentError(error, recovery: recoverySuggestion(for: error))
         }
+    }
+
+    func updateGroupIcon(_ group: DockGroup, iconSystemName: String) {
+        do {
+            try groupManager.saveMetadata(
+                for: group.folderPath,
+                name: group.name,
+                showAs: group.showAs,
+                arrangement: group.arrangement,
+                iconSystemName: iconSystemName
+            )
+
+            var updatedGroup = group
+            updatedGroup.iconSystemName = iconSystemName
+            updateExistingLauncherIfNeeded(group: updatedGroup)
+            loadGroups()
+        } catch {
+            presentError(error, recovery: recoverySuggestion(for: error))
+        }
+    }
+
+    func revealDockLauncher(for group: DockGroup) {
+        do {
+            try dockLauncherService.revealLauncher(for: group)
+        } catch {
+            presentError(error, recovery: "请确认系统允许 DockDIY 在 ~/Applications 中创建应用。")
+        }
+    }
+
+    func addDockLauncherToLeftDock(for group: DockGroup) {
+        do {
+            let launcherURL = try dockLauncherService.createLauncher(for: group)
+            guard layout != nil else { return }
+            if layout?.persistentApps.contains(where: { $0.path == launcherURL }) == true {
+                return
+            }
+            addAppToDock(appPath: launcherURL, to: .apps)
+            showApplyConfirmation = true
+        } catch {
+            presentError(error, recovery: "可以先使用「生成 Dock 图标」在 Finder 中查看生成结果，再手动拖到 Dock 左侧。")
+        }
+    }
+
+    private func updateExistingLauncherIfNeeded(group: DockGroup) {
+        let launcherURL = dockLauncherService.launcherAppURL(for: group)
+        guard FileManager.default.fileExists(atPath: launcherURL.path(percentEncoded: false)) else {
+            return
+        }
+        try? dockLauncherService.createLauncher(for: group)
     }
 
     func addAppToGroup(groupId: UUID, app: AppInfo) {

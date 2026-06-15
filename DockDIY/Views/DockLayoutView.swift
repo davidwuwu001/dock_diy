@@ -16,7 +16,7 @@ struct DockLayoutView: View {
                     // Persistent Apps Section
                     sectionHeader(
                         "应用区",
-                        subtitle: "Dock 左侧的应用程序",
+                        subtitle: "Dock 左侧的固定应用和分组弹出器",
                         count: layout.persistentApps.count,
                         actionTitle: "添加应用",
                         actionSystemImage: "plus"
@@ -28,17 +28,6 @@ struct DockLayoutView: View {
                     DockSectionView(
                         items: layout.persistentApps,
                         section: .apps
-                    )
-
-                    Divider()
-                        .padding(.vertical, 4)
-
-                    // Persistent Others Section
-                    sectionHeader("文件区", subtitle: "Dock 右侧的文件夹和文件（分组显示在这里）", count: layout.persistentOthers.count)
-
-                    DockSectionView(
-                        items: layout.persistentOthers,
-                        section: .others
                     )
 
                     if let selectedGroup {
@@ -53,11 +42,11 @@ struct DockLayoutView: View {
                             )
                     }
 
-                    if layout.persistentOthers.isEmpty {
+                    if viewModel.groups.isEmpty {
                         HStack {
                             Image(systemName: "info.circle")
                                 .foregroundStyle(.secondary)
-                            Text("还没有分组。点击左侧「新建分组」创建文件夹堆栈，分组会显示在这里。")
+                            Text("还没有分组。点击左侧「新建分组」创建一个可以生成左侧 Dock 图标的应用分组。")
                                 .font(.callout)
                                 .foregroundStyle(.secondary)
                         }
@@ -81,7 +70,7 @@ struct DockLayoutView: View {
                 } else {
                     ContentUnavailableView(
                         "未加载",
-                        systemImage: "dock.triangle.bottom",
+                        systemImage: "dock.rectangle",
                         description: Text("点击刷新按钮加载 Dock 配置")
                     )
                     .frame(maxWidth: .infinity, minHeight: 300)
@@ -232,20 +221,20 @@ struct GuideSheet: View {
 
                     guideStep(
                         number: 2,
-                        title: "查看分组效果",
-                        description: "创建后，分组会出现在左侧边栏和右侧「文件区」中。点击侧边栏的分组可以查看和管理其中的应用。"
+                        title: "管理分组内容",
+                        description: "创建后，分组会出现在左侧边栏。点击分组可以查看已经添加的应用，也可以继续添加、删除或编辑。"
                     )
 
                     guideStep(
                         number: 3,
-                        title: "应用到 Dock",
-                        description: "点击工具栏的「应用」按钮。Dock 会短暂消失 1-2 秒后恢复，此时你的分组会以文件夹堆栈（Stack）的形式出现在 Dock 右侧。"
+                        title: "生成左侧 Dock 图标",
+                        description: "在分组详情里点击「生成 Dock 图标」，DockDIY 会生成一个真正的 .app。你可以把它拖到 Dock 左侧，点击后弹出该分组里的应用。"
                     )
 
                     guideStep(
                         number: 4,
                         title: "管理分组",
-                        description: "• 右键点击 Dock 中的分组图标 → 编辑分组\n• 右键侧边栏分组 → 添加应用 / 删除分组\n• 拖拽应用图标来调整顺序\n• 从 Finder 拖入 .app 到应用区或文件区"
+                        description: "• 右键侧边栏分组 → 添加应用 / 删除分组\n• 分组详情里直接点击应用右上角的删除按钮\n• 修改分组后重新生成 Dock 图标即可更新弹出器"
                     )
 
                     Divider()
@@ -256,7 +245,7 @@ struct GuideSheet: View {
                         VStack(alignment: .leading) {
                             Text("提示")
                                 .font(.caption.bold())
-                            Text("所有更改在点击「应用」之前不会生效，你可以随时点击「刷新」撤销未应用的更改。每次应用前会自动备份 Dock 配置。")
+                            Text("只有把生成的分组图标自动加入左侧 Dock 时，才需要点击「应用」刷新 Dock。手动拖拽生成的 .app 到 Dock 左侧则不需要修改 Dock 配置。")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }

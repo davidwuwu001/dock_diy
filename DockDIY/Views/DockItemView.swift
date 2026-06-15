@@ -35,11 +35,6 @@ struct DockItemView: View {
                 .lineLimit(1)
                 .frame(maxWidth: 64)
 
-            if item.tileType == .directory {
-                Text("Stack")
-                    .font(.system(size: 9))
-                    .foregroundStyle(.secondary)
-            }
         }
         .padding(6)
         .contentShape(Rectangle())
@@ -86,17 +81,6 @@ struct DockItemView: View {
 
             Button("从 Dock 移除") {
                 viewModel.removeItem(item.guid, from: section)
-            }
-
-            if item.tileType == .directory {
-                Button("编辑分组...") {
-                    if let group = viewModel.groups.first(where: {
-                        $0.folderPath == item.path
-                    }) {
-                        viewModel.editingGroup = group
-                        viewModel.showGroupEditor = true
-                    }
-                }
             }
 
             Button("在 Finder 中显示") {

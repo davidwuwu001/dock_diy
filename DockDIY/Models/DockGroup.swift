@@ -1,4 +1,5 @@
 import Foundation
+import AppKit
 
 // MARK: - Stack Display Style
 
@@ -51,18 +52,49 @@ struct DockGroup: Identifiable {
     var members: [DockGroupMember]
     var showAs: StackDisplayStyle
     var arrangement: StackArrangement
+    var iconSystemName: String
 
     init(id: UUID = UUID(), name: String, folderPath: URL,
          members: [DockGroupMember] = [],
          showAs: StackDisplayStyle = .auto,
-         arrangement: StackArrangement = .name) {
+         arrangement: StackArrangement = .name,
+         iconSystemName: String = DockGroup.defaultIconSystemName) {
         self.id = id
         self.name = name
         self.folderPath = folderPath
         self.members = members
         self.showAs = showAs
         self.arrangement = arrangement
+        self.iconSystemName = iconSystemName
     }
+}
+
+struct GroupIconOption: Identifiable, Hashable {
+    let systemName: String
+    let displayName: String
+
+    var id: String { systemName }
+}
+
+extension DockGroup {
+    static let defaultIconSystemName = "folder"
+
+    static let iconOptions: [GroupIconOption] = [
+        GroupIconOption(systemName: "folder", displayName: "通用"),
+        GroupIconOption(systemName: "terminal", displayName: "终端"),
+        GroupIconOption(systemName: "curlybraces", displayName: "代码"),
+        GroupIconOption(systemName: "hammer", displayName: "开发"),
+        GroupIconOption(systemName: "paintbrush", displayName: "设计"),
+        GroupIconOption(systemName: "pencil", displayName: "写作"),
+        GroupIconOption(systemName: "doc.text", displayName: "办公"),
+        GroupIconOption(systemName: "globe", displayName: "网络"),
+        GroupIconOption(systemName: "sparkles", displayName: "AI"),
+        GroupIconOption(systemName: "wrench.and.screwdriver", displayName: "工具"),
+        GroupIconOption(systemName: "music.note", displayName: "音乐"),
+        GroupIconOption(systemName: "play.rectangle", displayName: "视频"),
+        GroupIconOption(systemName: "camera", displayName: "图片"),
+        GroupIconOption(systemName: "gamecontroller", displayName: "游戏")
+    ]
 }
 
 // MARK: - DockGroupMember
@@ -80,5 +112,3 @@ struct DockGroupMember: Identifiable {
         icon = NSWorkspace.shared.icon(forFile: appPath.path(percentEncoded: false))
     }
 }
-
-import AppKit

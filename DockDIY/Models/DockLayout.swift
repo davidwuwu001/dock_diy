@@ -13,7 +13,8 @@ struct DockLayout {
         return Set(appGUIDs + otherGUIDs + recentGUIDs)
     }
 
-    /// Return the directory-tile items (groups) from persistentOthers.
+    /// Return directory-tile items from the native Dock right side.
+    /// DockDIY groups are managed separately and do not use this collection.
     var groups: [DockItem] {
         persistentOthers.filter { $0.tileType == .directory }
     }

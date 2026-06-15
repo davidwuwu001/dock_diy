@@ -8,7 +8,7 @@ struct DockGroupView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Image(systemName: "folder")
+                Image(systemName: group.iconSystemName)
                     .foregroundStyle(.tint)
                 Text(group.name)
                     .font(.headline)
@@ -17,6 +17,8 @@ struct DockGroupView: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
+
+            iconPicker
 
             if group.members.isEmpty {
                 Text("此分组为空，点击「添加应用」来添加")
@@ -33,10 +35,27 @@ struct DockGroupView: View {
 
             HStack {
                 Button {
+                    viewModel.revealDockLauncher(for: group)
+                } label: {
+                    Label("在 Finder 中显示启动器", systemImage: "app")
+                }
+                .buttonStyle(.borderedProminent)
+                .disabled(group.members.isEmpty)
+                .help("显示可以拖到左侧 Dock 的启动器 App")
+
+                Button {
+                    viewModel.addDockLauncherToLeftDock(for: group)
+                } label: {
+                    Label("添加到左侧 Dock", systemImage: "plus.rectangle")
+                }
+                .buttonStyle(.bordered)
+                .disabled(group.members.isEmpty)
+
+                Button {
                     viewModel.appPickerTargetGroupId = group.id
                     viewModel.showAppPicker = true
                 } label: {
-                    Label("添加应用", systemImage: "plus")
+                    Label("应用", systemImage: "plus")
                 }
                 .buttonStyle(.bordered)
 
@@ -44,13 +63,63 @@ struct DockGroupView: View {
                     viewModel.editingGroup = group
                     viewModel.showGroupEditor = true
                 } label: {
-                    Label("编辑", systemImage: "pencil")
+                    Image(systemName: "pencil")
                 }
                 .buttonStyle(.bordered)
+                .help("编辑分组")
             }
             .padding(.top, 4)
         }
         .padding()
+    }
+
+    private var iconPicker: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Text("Dock 图标")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                Spacer()
+                Text(DockGroup.iconOptions.first { $0.systemName == group.iconSystemName }?.displayName ?? "通用")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 58))], spacing: 8) {
+                ForEach(DockGroup.iconOptions) { option in
+                    iconButton(option)
+                }
+            }
+        }
+        .padding(.vertical, 4)
+    }
+
+    private func iconButton(_ option: GroupIconOption) -> some View {
+        let isSelected = group.iconSystemName == option.systemName
+        return Button {
+            viewModel.updateGroupIcon(group, iconSystemName: option.systemName)
+        } label: {
+            VStack(spacing: 4) {
+                Image(systemName: option.systemName)
+                    .font(.system(size: 20, weight: .semibold))
+                    .frame(width: 30, height: 24)
+                Text(option.displayName)
+                    .font(.system(size: 10))
+                    .lineLimit(1)
+            }
+            .frame(width: 54, height: 48)
+            .background(
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(isSelected ? Color.accentColor.opacity(0.16) : Color.clear)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(isSelected ? Color.accentColor : Color.secondary.opacity(0.18), lineWidth: 1)
+            )
+        }
+        .buttonStyle(.plain)
+        .disabled(isSelected)
+        .help(option.displayName)
     }
 
     private func memberView(_ member: DockGroupMember) -> some View {

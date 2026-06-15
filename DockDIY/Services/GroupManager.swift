@@ -6,6 +6,14 @@ final class GroupManager {
     static let shared = GroupManager()
 
     private let fileManager = FileManager.default
+    private let metadataFileName = ".dockdiy.json"
+
+    private struct GroupMetadata: Codable {
+        var name: String
+        var showAs: StackDisplayStyle
+        var arrangement: StackArrangement
+        var iconSystemName: String?
+    }
 
     var groupsDirectory: URL {
         let appSupport = fileManager.homeDirectoryForCurrentUser
@@ -25,6 +33,19 @@ final class GroupManager {
         let folderURL = groupsDirectory.appendingPathComponent(name)
         try fileManager.createDirectory(at: folderURL, withIntermediateDirectories: true)
         return folderURL
+    }
+
+    func saveMetadata(for groupPath: URL, name: String,
+                      showAs: StackDisplayStyle, arrangement: StackArrangement,
+                      iconSystemName: String = DockGroup.defaultIconSystemName) throws {
+        let metadata = GroupMetadata(
+            name: name,
+            showAs: showAs,
+            arrangement: arrangement,
+            iconSystemName: iconSystemName
+        )
+        let data = try JSONEncoder().encode(metadata)
+        try data.write(to: groupPath.appendingPathComponent(metadataFileName), options: .atomic)
     }
 
     func deleteGroupFolder(at path: URL) throws {
@@ -103,11 +124,45 @@ final class GroupManager {
         }
     }
 
+    func scanManagedGroups() -> [DockGroup] {
+        let contents = (try? fileManager.contentsOfDirectory(
+            at: groupsDirectory,
+            includingPropertiesForKeys: [.isDirectoryKey],
+            options: [.skipsHiddenFiles]
+        )) ?? []
+
+        return contents.compactMap { url -> DockGroup? in
+            guard (try? url.resourceValues(forKeys: [.isDirectoryKey]).isDirectory) == true else {
+                return nil
+            }
+
+            let metadata = loadMetadata(groupPath: url)
+            let name = metadata?.name ?? url.lastPathComponent
+            return DockGroup(
+                name: name,
+                folderPath: url,
+                members: scanGroupMembers(groupPath: url),
+                showAs: metadata?.showAs ?? .list,
+                arrangement: metadata?.arrangement ?? .name,
+                iconSystemName: metadata?.iconSystemName ?? DockGroup.defaultIconSystemName
+            )
+        }
+        .sorted {
+            $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending
+        }
+    }
+
     // MARK: - Rename Group
 
     func renameGroup(oldName: String, newName: String) throws {
         let oldURL = groupsDirectory.appendingPathComponent(oldName)
         let newURL = groupsDirectory.appendingPathComponent(newName)
         try fileManager.moveItem(at: oldURL, to: newURL)
+    }
+
+    private func loadMetadata(groupPath: URL) -> GroupMetadata? {
+        let url = groupPath.appendingPathComponent(metadataFileName)
+        guard let data = try? Data(contentsOf: url) else { return nil }
+        return try? JSONDecoder().decode(GroupMetadata.self, from: data)
     }
 }

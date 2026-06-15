@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0CF0BE3626536F202EE5DAA0 /* DockViewModelGroupTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 469F3287C923F4EF8EBD7BC0 /* DockViewModelGroupTests.swift */; };
 		1CA594D0D91B3F82AD01EA50 /* DockTransferable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B70B99576D468310A25F7C15 /* DockTransferable.swift */; };
 		2509AAE0E51415BE186B2786 /* DockGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 461CE08C258B75D093764610 /* DockGroup.swift */; };
 		29CC7838BDD0527D86524EF5 /* DockItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEDB074B846CD1979C1489FB /* DockItem.swift */; };
@@ -22,9 +23,13 @@
 		9E8740137D8454863DCB334E /* DockLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E888A46A6C530172FDAAA4 /* DockLayout.swift */; };
 		A2CA9EE2A076C3C78EA9586D /* AppPickerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246D3912DB2348CB8DBA0D25 /* AppPickerSheet.swift */; };
 		A51EB590F06C8206CDE62D76 /* DockDIYApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D982D490F1B76062234135 /* DockDIYApp.swift */; };
+		B4EC03D8CD1A04C302873B3B /* DockLauncherService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EAF453D3C9F4345FA8F67C0 /* DockLauncherService.swift */; };
 		C5BE4D07C4EA8F90C992D7F6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A8B96380DF7FF4E788A4E9F3 /* Assets.xcassets */; };
 		C674B64EAF77CD494349A6AA /* DockViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C5E04A952DB6A8BBC845821 /* DockViewModel.swift */; };
 		C6D977B9455E2B7BA161DEE1 /* DockLayoutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 344EF471C2EF0906312E0C59 /* DockLayoutView.swift */; };
+		E6DF2CF156D70225C7DE9C16 /* DockPopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25ABADA8C2C2D76E4D662D9C /* DockPopupView.swift */; };
+		EADA6BF5450651012E593316 /* DockLauncherServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0358478AABC35E8B70A35634 /* DockLauncherServiceTests.swift */; };
+		FB29A0C4AB9574788F2FCD86 /* DockPopupController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264FA07B2582BACF5DD9CDC7 /* DockPopupController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,11 +43,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0358478AABC35E8B70A35634 /* DockLauncherServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockLauncherServiceTests.swift; sourceTree = "<group>"; };
 		1F739CA240C81D5F51ABDDD2 /* IconCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconCache.swift; sourceTree = "<group>"; };
 		246D3912DB2348CB8DBA0D25 /* AppPickerSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPickerSheet.swift; sourceTree = "<group>"; };
 		249A4F33B881A2A50DBD4129 /* DockDIY.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DockDIY.entitlements; sourceTree = "<group>"; };
+		25ABADA8C2C2D76E4D662D9C /* DockPopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockPopupView.swift; sourceTree = "<group>"; };
+		264FA07B2582BACF5DD9CDC7 /* DockPopupController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockPopupController.swift; sourceTree = "<group>"; };
 		344EF471C2EF0906312E0C59 /* DockLayoutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockLayoutView.swift; sourceTree = "<group>"; };
 		461CE08C258B75D093764610 /* DockGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockGroup.swift; sourceTree = "<group>"; };
+		469F3287C923F4EF8EBD7BC0 /* DockViewModelGroupTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockViewModelGroupTests.swift; sourceTree = "<group>"; };
 		4B95288CDFD3C9F326EDC295 /* DockDIY.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DockDIY.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5C5E04A952DB6A8BBC845821 /* DockViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockViewModel.swift; sourceTree = "<group>"; };
 		643DB609498DE22AFC6A63B7 /* AppDiscoveryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDiscoveryService.swift; sourceTree = "<group>"; };
@@ -50,6 +59,7 @@
 		6D4F599DA2A85A77BF04A924 /* DockPlistService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockPlistService.swift; sourceTree = "<group>"; };
 		7C7EAED160D8757FC6E62FB0 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		86E888A46A6C530172FDAAA4 /* DockLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockLayout.swift; sourceTree = "<group>"; };
+		9EAF453D3C9F4345FA8F67C0 /* DockLauncherService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockLauncherService.swift; sourceTree = "<group>"; };
 		A8B96380DF7FF4E788A4E9F3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AEDB074B846CD1979C1489FB /* DockItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockItem.swift; sourceTree = "<group>"; };
 		B70B99576D468310A25F7C15 /* DockTransferable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DockTransferable.swift; sourceTree = "<group>"; };
@@ -95,6 +105,7 @@
 				67D6C64545D070554E836028 /* DockGroupView.swift */,
 				D44788BE30180C76FE45619A /* DockItemView.swift */,
 				344EF471C2EF0906312E0C59 /* DockLayoutView.swift */,
+				25ABADA8C2C2D76E4D662D9C /* DockPopupView.swift */,
 				F27264E652631DB114FCA9DC /* GroupEditorSheet.swift */,
 				DA4693ECC334FF7EF8B5F9A4 /* SidebarView.swift */,
 			);
@@ -139,6 +150,8 @@
 		AB0F1DD3E26C653EEBDB1948 /* DockDIYTests */ = {
 			isa = PBXGroup;
 			children = (
+				0358478AABC35E8B70A35634 /* DockLauncherServiceTests.swift */,
+				469F3287C923F4EF8EBD7BC0 /* DockViewModelGroupTests.swift */,
 			);
 			path = DockDIYTests;
 			sourceTree = "<group>";
@@ -147,7 +160,9 @@
 			isa = PBXGroup;
 			children = (
 				643DB609498DE22AFC6A63B7 /* AppDiscoveryService.swift */,
+				9EAF453D3C9F4345FA8F67C0 /* DockLauncherService.swift */,
 				6D4F599DA2A85A77BF04A924 /* DockPlistService.swift */,
+				264FA07B2582BACF5DD9CDC7 /* DockPopupController.swift */,
 				BB3630E744E39FFC14123909 /* GroupManager.swift */,
 			);
 			path = Services;
@@ -249,6 +264,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EADA6BF5450651012E593316 /* DockLauncherServiceTests.swift in Sources */,
+				0CF0BE3626536F202EE5DAA0 /* DockViewModelGroupTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -264,9 +281,12 @@
 				77DE4489ADCB751B560956DD /* DockGroupView.swift in Sources */,
 				29CC7838BDD0527D86524EF5 /* DockItem.swift in Sources */,
 				8AE82F3E63B9ED8F2816E3A4 /* DockItemView.swift in Sources */,
+				B4EC03D8CD1A04C302873B3B /* DockLauncherService.swift in Sources */,
 				9E8740137D8454863DCB334E /* DockLayout.swift in Sources */,
 				C6D977B9455E2B7BA161DEE1 /* DockLayoutView.swift in Sources */,
 				4D9E54FC7C1D32B470A7818E /* DockPlistService.swift in Sources */,
+				FB29A0C4AB9574788F2FCD86 /* DockPopupController.swift in Sources */,
+				E6DF2CF156D70225C7DE9C16 /* DockPopupView.swift in Sources */,
 				1CA594D0D91B3F82AD01EA50 /* DockTransferable.swift in Sources */,
 				C674B64EAF77CD494349A6AA /* DockViewModel.swift in Sources */,
 				76DF07C8C2290BBAE9873AAF /* GroupEditorSheet.swift in Sources */,
@@ -436,6 +456,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -479,6 +500,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",

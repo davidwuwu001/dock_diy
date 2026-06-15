@@ -10,7 +10,7 @@ struct SidebarView: View {
             Section("分组") {
                 ForEach(viewModel.groups) { group in
                     HStack {
-                        Image(systemName: "folder")
+                        Image(systemName: group.iconSystemName)
                             .foregroundStyle(.tint)
                         VStack(alignment: .leading) {
                             Text(group.name)
